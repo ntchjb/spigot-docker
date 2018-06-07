@@ -38,11 +38,11 @@ docker logs spg
 ```
 Copy files from the container to host
 ```
-docker cp spg:/mcserver server
+docker cp spg:/mcserver mcserver
 ```
 Copy files from the host to the container (Example)
 ```
-docker cp server/world spg:/mcserver/world
+docker cp mcserver/world spg:/mcserver/world
 ```
 After building the server, it will give spigot.jar which is the server file and spigot-API files which are shaded version and non-shaded version. This container may be used to generate server files or create server to play with friends.
 
