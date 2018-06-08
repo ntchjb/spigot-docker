@@ -1,5 +1,5 @@
 # Spigot Minecraft Server in a docker.
-# Dockerfile for building and starting spigot server
+# Dockerfile for running spigot server
 # Author: ntchjb
 # Created: 7 June 2018
 

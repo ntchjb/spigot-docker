@@ -29,6 +29,24 @@ or
 docker-compose up -d
 ```
 
+## For who is using Docker for Mac
+
+MacOS use different mechanism of file systen, therefore, put :delegated tag at the end of volumes in docker compose file to increase performance, like this
+
+```
+version: "3"
+services:
+  spg:
+    build: .
+    volumes:
+      - ./mcserver/:/mcserver:delegated
+    ports:
+      - 25565:25565
+    stdin_open: true
+    tty: true
+
+```
+
 ## Other instructions
 To start the existing container
 ```

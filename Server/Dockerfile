@@ -1,5 +1,5 @@
 # Spigot Minecraft Server in a docker.
-# Dockerfile for building and starting spigot server
+# Dockerfile for building spigot.jar
 # Author: ntchjb
 # Created: 7 June 2018
 
@@ -9,7 +9,7 @@ FROM openjdk:jre-alpine
 WORKDIR /
 RUN mkdir mcserver mccore
 
-# Create start script and start spigot server, this will allocate 2 GB of RAM.
+# Import script files, this will allocate 2 GB of RAM.
 WORKDIR /mccore
 ADD spigot.jar .
 ADD START.sh .
