@@ -3,11 +3,11 @@
 # Author: ntchjb
 # Created: 7 June 2018
 
-FROM debian:latest
+FROM openjdk:jre-alpine
 
 # Install packages and setup git
 WORKDIR /
-RUN apt-get update && apt-get install git curl openjdk-8-jre-headless -y && mkdir mcbuild mcserver
+RUN apk update && apk add git curl && mkdir mcbuild mcserver
 
 # Build Spigot from its build tools
 WORKDIR mcbuild

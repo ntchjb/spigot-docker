@@ -7,7 +7,7 @@ This container will generate a spigot server files from its build tools and star
 ### Build the server
 Build the image of the container
 ```
-docker build -t spigot .
+docker build -t spigot-build .
 ```
 And then copy file to your host (docker run volume require full path, so we included $(pwd)) (spgb name can be changed to any unique name)
 ```
@@ -16,6 +16,7 @@ docker run -v $(pwd)/result:/mcserver --rm --name spgb spigot-build
 or
 ```
 docker-compose up
+docker-compose down
 ```
 
 ### Run the server

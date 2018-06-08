@@ -3,11 +3,11 @@
 # Author: ntchjb
 # Created: 7 June 2018
 
-FROM debian:latest
+FROM openjdk:jre-alpine
 
 # Install packages and setup git
 WORKDIR /
-RUN apt-get update && apt-get install openjdk-8-jre-headless -y && mkdir mcserver mccore
+RUN mkdir mcserver mccore
 
 # Create start script and start spigot server, this will allocate 2 GB of RAM.
 WORKDIR /mccore
