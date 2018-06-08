@@ -7,17 +7,16 @@ FROM debian:latest
 
 # Install packages and setup git
 WORKDIR /
-RUN apt-get update && apt-get install openjdk-8-jre-headless -y && mkdir mcserver
+RUN apt-get update && apt-get install openjdk-8-jre-headless -y && mkdir mcserver mccore
 
 # Create start script and start spigot server, this will allocate 2 GB of RAM.
-WORKDIR /mcserver
+WORKDIR /mccore
 ADD spigot.jar .
 ADD START.sh .
-RUN chmod +x ./START.sh
-RUN ./START.sh
-# Accept EULA agreement
-RUN sed -i 's/false/true/g' eula.txt
-EXPOSE 25565
-CMD ./START.sh
+ADD condi.sh .
+RUN chmod +x ./START.sh && chmod +x ./condi.sh
 
-#RUN screen -p 0 -S spigotinit -X eval "stuff \"stop\"\015"
+WORKDIR /mcserver
+EXPOSE 25565
+# Accept EULA agreement and start running
+CMD /mccore/condi.sh
