@@ -1,1 +1,4 @@
 .DS_Store
+Server/mcserver
+Server/spigot.jar
+Builder/result

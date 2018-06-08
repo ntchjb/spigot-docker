@@ -7,11 +7,11 @@ FROM debian:latest
 
 # Install packages and setup git
 WORKDIR /
-RUN apt-get update && apt-get install git openjdk-8-jre-headless -y && mkdir mcserver
+RUN apt-get update && apt-get install openjdk-8-jre-headless -y && mkdir mcserver
 
 # Create start script and start spigot server, this will allocate 2 GB of RAM.
 WORKDIR /mcserver
-ADD Builder/result/spigot.jar .
+ADD spigot.jar .
 ADD START.sh .
 RUN chmod +x ./START.sh
 RUN ./START.sh

@@ -11,8 +11,8 @@ RUN apt-get update && apt-get install git curl openjdk-8-jre-headless -y && mkdi
 
 # Build Spigot from its build tools
 WORKDIR mcbuild
-CMD curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar && \
-  java -jar BuildTools.jar && \
-  cp Spigot/Spigot-API/target/spigot-api* /mcserver/ && \
+RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+RUN java -jar BuildTools.jar
+CMD cp Spigot/Spigot-API/target/spigot-api* /mcserver/ && \
   cp spigot-*.jar /mcserver/spigot.jar && \
-  rm -r ./*
+  ls /mcserver

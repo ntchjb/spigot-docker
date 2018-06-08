@@ -4,14 +4,46 @@ This container will generate a spigot server files from its build tools and star
 
 ## Build and Start the server
 
-Build the docker to produce spigot files
+Build the server
+Build the image of the container
 ```
 docker build -t spigot .
 ```
-And then run it
+And then copy file to your host (docker run volume require full path, so we included $(pwd)) (spgb name can be changed to any unique name)
 ```
-docker run -it -d -p 25565:25565 --name spg spigot
+docker run -v $(pwd)/result:/mcserver --rm --name spgb spigot-build
 ```
+or
+```
+docker-compose up
+```
+
+Run the server
+
+First, you need to move/copy spigot.jar file into Server folder and then run this command to start running
+Assuming that your current directory is Server
+```
+docker run -it --name spg spigot-server
+```
+Then, you stop the server by typing
+```
+stop
+```
+Then, copy files from container to the host
+```
+docker cp spg:/mcserver .
+docker rm spg
+```
+Then, start again with mounting (spg name can be changed to any unique name)
+```
+docker run -v $(pwd)/mcserver:/mcserver -it --name spg spigot-server
+```
+or
+```
+docker-compose up
+```
+
+## Other instructions
 To start the existing container
 ```
 docker start spg
@@ -44,7 +76,7 @@ Copy files from the host to the container (Example)
 ```
 docker cp mcserver/world spg:/mcserver/world
 ```
-After building the server, it will give spigot.jar which is the server file and spigot-API files which are shaded version and non-shaded version. This container may be used to generate server files or create server to play with friends.
+After building the server, it will give spigot.jar which is the server file and spigot-API files which are shaded version and non-shaded version. This container may be used to generate server files or create server to play with your friends.
 
 1. Mount volume
 2. Copy spigot.jar, start.sh and spigot-api to mounted volume
