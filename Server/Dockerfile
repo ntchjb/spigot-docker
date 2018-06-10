@@ -22,4 +22,5 @@ WORKDIR /mcserver
 EXPOSE 25565
 # Accept EULA agreement and start running
 USER minecraft
+VOLUME [ "/mcserver" ]
 CMD /mccore/condi.sh
