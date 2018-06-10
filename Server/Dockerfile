@@ -7,8 +7,11 @@ FROM openjdk:jre-alpine
 
 # Install packages and setup git
 WORKDIR /
-RUN mkdir mcserver mccore
-
+RUN mkdir 
+RUN addgroup -g 1000 minecraft \
+  && adduser -Ss /bin/false -u 1000 -G minecraft -h /home/minecraft minecraft \
+  && mkdir -m 770 mcserver mccore \
+  && chown minecraft:minecraft mcserver mccore /home/minecraft
 # Import script files, this will allocate 2 GB of RAM.
 WORKDIR /mccore
 ADD spigot.jar .
@@ -19,4 +22,5 @@ RUN chmod +x ./START.sh && chmod +x ./condi.sh
 WORKDIR /mcserver
 EXPOSE 25565
 # Accept EULA agreement and start running
+USER minecraft
 CMD /mccore/condi.sh
