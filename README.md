@@ -4,10 +4,10 @@ This container generates spigot server files from its build tool and starts the 
 
 ## Build and Run the Server
 
-### Build the server
+### Build a server
 
 
-Build the image of the container by using `Dockerfile` inside `Builder` folder, and then transfer the result to your host by running with mounting the images (Volume option in `docker run` requires full path, so we include `$(pwd)`) (`spgb` is a container name)
+Build a docker image by using `Dockerfile` inside `Builder` folder, and then transfer the result to your host by running and mounting the image (Volume option in `docker run` requires full path, so we include `$(pwd)`) (`spgb` is a container name)
 ``` shell
 docker build -t spigot-build .
 docker run -v $(pwd)/result:/mcserver --rm --name spgb spigot-build
@@ -18,8 +18,8 @@ docker-compose up --build
 docker-compose down
 ```
 
-### Run the server
-Put your spigot.jar file into `Server` folder and run the following command in the folder. *EULA needs to be accepted to use the server by adding `-e EULA=true` as an argument to `docker run` command.*
+### Run a server
+Put your spigot.jar file into `Server` folder and run following commands in the folder. *EULA needs to be accepted to use server by adding `-e EULA=true` as an argument to `docker run` command.*
 ``` shell
 docker build -t spigot-server .
 docker run -v $(pwd)/mcserver:/mcserver -itd -e EULA=true --name spg spigot-server /mccore/START.sh
@@ -37,7 +37,7 @@ If you don't know your container name, you can check it by typing `docker ps`.
 To stop the server, use `docker attach` and type `stop` to stop the server. The container will be automatically stopped after stopped the server.
 
 `START.sh` can be edited to change memory usage and other arguments.
-`condi.sh` will check for EULA and then start the server
+`condi.sh` will check for EULA and then start the server. No need to change here.
 
 enjoy :)
 
