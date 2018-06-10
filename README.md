@@ -1,74 +1,75 @@
 # Spigot Minecraft Server in a Docker
 
-This container will generate a spigot server files from its build tools and start the server at default port number. The server's file can be modified in server folder
+This container generates spigot server files from its build tool and starts the server at default port number. There is 2 main parts, which are builder and server.
 
-## Build and Start the server
+## Build and Run the Server
 
 ### Build the server
-Build the image of the container
-```
+
+
+Build the image of the container by using `Dockerfile` inside `Builder` folder, and then transfer the result to your host by running with mounting the images (Volume option in `docker run` requires full path, so we include `$(pwd)`) (`spgb` is a container name)
+``` shell
 docker build -t spigot-build .
-```
-And then copy file to your host (docker run volume require full path, so we included $(pwd)) (spgb name can be changed to any unique name)
-```
 docker run -v $(pwd)/result:/mcserver --rm --name spgb spigot-build
 ```
-or
-```
-docker-compose up
+or use docker-compose for more convenient
+``` shell
+docker-compose up --build
 docker-compose down
 ```
 
 ### Run the server
-Start with mounting (spg name can be changed to any unique name)
+Put your spigot.jar file into `Server` folder and run the following command in the folder. *EULA needs to be accepted to use the server by adding `-e EULA=true` as an argument to `docker run` command.*
+``` shell
+docker build -t spigot-server .
+docker run -v $(pwd)/mcserver:/mcserver -itd -e EULA=true --name spg spigot-server /mccore/START.sh
 ```
-docker run -v $(pwd)/mcserver:/mcserver -itd --name spg spigot-server /mccore/START.sh
+or use docker compose instead. *EULA can be set in `docker-compose.yml`*
+``` shell
+docker-compose up -d --build
 ```
-or
+Now, your server is running. To access Minecraft console, use this command to get inside the container
+``` shell
+docker attach server_spg_1
 ```
-docker-compose up -d
+If you don't know your container name, you can check it by typing `docker ps`.
+
+To stop the server, use `docker attach` and type `stop` to stop the server. The container will be automatically stopped after stopped the server.
+
+`START.sh` can be edited to change memory usage and other arguments.
+`condi.sh` will check for EULA and then start the server
+
+enjoy :)
+
+## For those who are using Docker for Mac
+
+MacOS uses different mechanism of file system, which may decrease the performance of mounting volume. Therefore, we reccommended to put `:delegated` tag at the end of volumes in docker compose file to increase performance, like this:
+
+``` yml
+volumes:
+  - ./mcserver/:/mcserver:delegated
 ```
 
-## For who is using Docker for Mac
+## Other useful instructions (Docker commands)
 
-MacOS use different mechanism of file systen, therefore, put :delegated tag at the end of volumes in docker compose file to increase performance, like this
-
+Start & stop the existing container
 ```
-version: "3"
-services:
-  spg:
-    build: .
-    volumes:
-      - ./mcserver/:/mcserver:delegated
-    ports:
-      - 25565:25565
-    stdin_open: true
-    tty: true
-
+docker start <container name>
+docker stop <container name>
 ```
-
-## Other instructions
-To start the existing container
+Delete the stopped container. Game files will not be deleted
 ```
-docker start spg
+docker rm <container name>
 ```
-To stop the existing container
+Use Minecraft console inside the container. Note that the previous logs won't be displayed.
 ```
-docker stop spg
+docker attach <container name>
 ```
-To delete the stopped container
-```
-docker rm spg
-```
-To use the server console, use this command below. Note that it will not display previous log of the server console.
-```
-docker attach spg
-```
-To detach from the console, type
+Exit after attached the container, type:
 ```
 Ctrl+P, Ctrl+Q
 ```
-To view server log, use the command below. Add -f before spg to stream the new log and type Ctrl+C to quit
+View server logs. Add -f before spg to stream the new log and type Ctrl+C to quit
 ```
 docker logs spg
 ```
@@ -80,15 +81,3 @@ Copy files from the host to the container (Example)
 ```
 docker cp mcserver/world spg:/mcserver/world
 ```
-After building the server, it will give spigot.jar which is the server file and spigot-API files which are shaded version and non-shaded version. This container may be used to generate server files or create server to play with your friends.
-
-## Notes
-
-When a docker container is mounted to a host, the host folder will override container's folder Therefore, to transfer the folder inside the container to the host, Copying file from another folder in the container to the mounted folder during running (CMD period) is required. Here is the methods of the first-time running.
-
-1. Mount volume
-2. Copy spigot.jar, start.sh and spigot-api to mounted volume
-3. Run start.sh, edit eula, and run again
-4. Done, all files has been generated inside mounted volume
-
-But, for running second time and so on, we need only running the server. Therefore, CMD inside the dockerfile can be replaced with command in docker-compose or command in docker run.
