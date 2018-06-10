@@ -7,10 +7,9 @@ FROM openjdk:jre-alpine
 
 # Install packages and setup git
 WORKDIR /
-RUN mkdir 
 RUN addgroup -g 1000 minecraft \
   && adduser -Ss /bin/false -u 1000 -G minecraft -h /home/minecraft minecraft \
-  && mkdir -m 770 mcserver mccore \
+  && mkdir -m 777 mcserver mccore \
   && chown minecraft:minecraft mcserver mccore /home/minecraft
 # Import script files, this will allocate 2 GB of RAM.
 WORKDIR /mccore
