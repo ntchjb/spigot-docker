@@ -4,7 +4,7 @@ This container generates spigot server files from its build tool and starts the 
 
 ## Build and Run the Server
 
-### Build a server
+### Build spigot.jar and its API
 
 
 Build a docker image by using `Dockerfile` inside `Builder` folder, and then transfer the result to your host by running and mounting the image (Volume option in `docker run` requires full path, so we include `$(pwd)`) (`spgb` is a container name)
