@@ -1,6 +1,6 @@
 # Spigot Minecraft Server in a Docker
 
-This container generates spigot server files from its build tool and starts the server at default port number. There is 2 main parts, which are builder and server.
+This 2 containers generates spigot server files from its build tool and starts the server at default port number. There is 2 main parts, which are builder and server.
 
 ## Build and Run the Server
 
