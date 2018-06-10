@@ -1,6 +1,6 @@
 # Spigot Minecraft Server in a Docker
 
-This 2 containers generates spigot server files from its build tool and starts the server at default port number. There is 2 main parts, which are builder and server.
+These 2 containers generate spigot server files from its build tool and starts the server at default port number. There is 2 main parts, which are builder and server.
 
 ## Build and Run the Server
 
@@ -40,6 +40,16 @@ To stop the server, use `docker attach` and type `stop` to stop the server. The 
 `condi.sh` will check for EULA and then start the server. No need to change here.
 
 enjoy :)
+
+## For mcserver folder permission
+
+Please make directory called `mcserver` under `Server` folder and set its permission to UID=1000 to be able to use them
+
+```
+mkdir Server/mcserver
+sudo chown -R 1000 Server/mcserver
+sudo chmod 0750 Server/mcserver
+```
 
 ## For those who are using Docker for Mac
 
