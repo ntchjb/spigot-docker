@@ -33,9 +33,9 @@ RUN mkdir -m 770 /data && \
 
 # Import script files
 WORKDIR /scripts
-ADD ./scripts/START.sh .
-ADD ./scripts/condi.sh .
-RUN chmod +x START.sh condi.sh
+ADD ./scripts/start.sh .
+ADD ./scripts/runserver.sh .
+RUN chmod +x start.sh runserver.sh
 
 # Set open port, current directory, current login user, and volume path
 EXPOSE 25565
@@ -44,4 +44,4 @@ USER minecraft
 VOLUME [ "/data" ]
 
 # Always run this scripts after started container
-CMD /scripts/condi.sh
+CMD /scripts/start.sh
