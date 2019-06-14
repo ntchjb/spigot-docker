@@ -9,18 +9,6 @@ WORKDIR /
 RUN yum update -y
 RUN yum install -y git curl
 
-# Build Spigot from its build tools
-WORKDIR /mcbuild
-RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-RUN mkdir /buildResult
-ARG version
-RUN java -jar BuildTools.jar --rev ${version}
-
-# Copy the result to a specific folder
-RUN cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
-    cp spigot-*.jar /buildResult/spigot.jar
-
-# Run server
 # Add normal user who run and manipulate server
 WORKDIR /
 RUN groupadd -g 1000 minecraft \
@@ -37,11 +25,23 @@ ADD ./scripts/start.sh .
 ADD ./scripts/runserver.sh .
 RUN chmod +x start.sh runserver.sh
 
-# Set open port, current directory, current login user, and volume path
+# Set open port, current directory, and volume path
 EXPOSE 25565
 WORKDIR /data
-USER minecraft
 VOLUME [ "/data" ]
 
+# Build Spigot from its build tools
+RUN mkdir /buildResult
+ARG version
+WORKDIR /mcbuild
+RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+RUN java -jar BuildTools.jar --rev ${version}
+
+# Copy the result to a specific folder
+RUN cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
+    cp spigot-*.jar /buildResult/spigot.jar
+
+# Set current login user
+USER minecraft
 # Always run this scripts after started container
 CMD /scripts/start.sh
