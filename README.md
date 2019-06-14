@@ -17,7 +17,7 @@ You may need to get familiar with Docker before using it (which is easy!). Here 
 3. Create an empty folder called `mcdata` in the project folder. All Spigot files will be generated inside this folder after run the server.
 4. Run the following command to build and start Spigot Minecraft server.
 
-```
+```shell
 docker-compose up -d
 ```
 
@@ -47,11 +47,21 @@ Note that these properties are environment variables inside the Spigot's contain
 
 In order to update or change Spigot version, rebuild Docker image is required, so that build tools can be updated. The command is as follow.
 
-```
-docker-compose build --no-cache --build-arg version=<your_preferred_version>
+```shell
+docker-compose build --build-arg version=<your_preferred_version>
 ```
 
 The command above rebuild the entire Docker image with disabling cache, so that build tool and other necessary files are newly downloaded from the internet. preferred version can also be specified as properties for building the image. Replace `<your_preferred_version>` to your preferred version of Spigot server e.g. `1.14.2`.
+
+However, if build tool need to be updated but still use the same version of server, please add another build argument like this
+
+```shell
+docker-compose build \
+--build-arg version=<your_preferred_version> \
+--build-arg revision=<your arbitrary build version>
+```
+
+Replace `<your arbitrary build version>` to any value that is different from the previous build. For example, if your previous biuld doesn't provide revision argument, then you can use revision argument with any value as you like. However, if your previous build used `1234` as the revision argument, the current build should have different revision value like `1235`, or omit the declaration of revision argument.
 
 ## Manipulate Server Files
 
@@ -61,7 +71,7 @@ In order to add plugins, datapacks, or modify `server.properties`, these files c
 
 Accessing Spigot server console can be done with the following command
 
-```
+```shell
 docker attach spigot-docker_spigot_1
 ```
 
@@ -73,22 +83,22 @@ MacOS uses different mechanism of file system, which may decrease the performanc
 
 ``` yml
 volumes:
-  - ./mcserver/:/mcserver:delegated
+  - ./mcdata/:/data:delegated
 ```
 
 ## Other useful instructions (Docker commands)
 
 Start & stop the existing container
-```
+```shell
 docker start <container name>
 docker stop <container name>
 ```
 Delete the stopped container. Game files will not be deleted
-```
+```shell
 docker rm <container name>
 ```
 Use Minecraft console inside the container. Note that the previous logs won't be displayed.
-```
+```shell
 docker attach <container name>
 ```
 Exit after attached the container, type:
@@ -96,18 +106,18 @@ Exit after attached the container, type:
 Ctrl+P, Ctrl+Q
 ```
 View server logs. Add -f before spg to stream the new log and type Ctrl+C to quit
-```
+```shell
 docker logs spg
 ```
 Copy files from the container to host
-```
+```shell
 docker cp spg:/mcserver mcserver
 ```
 Copy files from the host to the container (Example)
-```
+```shell
 docker cp mcserver/world spg:/mcserver/world
 ```
 
 # Credits
 
-Made by Nathachai Jaiboon
+Made with :heart: by Nathachai Jaiboon.

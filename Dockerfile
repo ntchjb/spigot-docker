@@ -32,14 +32,27 @@ VOLUME [ "/data" ]
 
 # Build Spigot from its build tools
 RUN mkdir /buildResult
-ARG version
 WORKDIR /mcbuild
+
+RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+RUN java -jar BuildTools.jar
+
+RUN rm Spigot/Spigot-API/target/spigot-api* && \
+    rm spigot-*.jar
+
+# This version specify Spigot server version
+ARG version
+# This argument is a dummy argument which break cache if its value is changed.
+ARG revision
 RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 RUN java -jar BuildTools.jar --rev ${version}
 
 # Copy the result to a specific folder
 RUN cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
     cp spigot-*.jar /buildResult/spigot.jar
+
+# Delete all building files.
+RUN rm -rf /mcbuild
 
 # Set current login user
 USER minecraft
