@@ -25,9 +25,8 @@ ADD ./scripts/start.sh .
 ADD ./scripts/runserver.sh .
 RUN chmod +x start.sh runserver.sh
 
-# Set open port, current directory, and volume path
+# Set open port and volume path
 EXPOSE 25565
-WORKDIR /data
 VOLUME [ "/data" ]
 
 # Build Spigot from its build tools
@@ -53,8 +52,8 @@ RUN cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
 
 # Delete all building files.
 RUN rm -rf /mcbuild
-
 # Set current login user
 USER minecraft
+WORKDIR /data
 # Always run this scripts after started container
 CMD /scripts/start.sh
