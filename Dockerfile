@@ -2,7 +2,7 @@
 # Dockerfile for build and run spigot server
 # Author: ntchjb
 
-FROM openjdk:12
+FROM openjdk:13
 
 # Install packages and setup git
 WORKDIR /
@@ -33,25 +33,17 @@ VOLUME [ "/data" ]
 RUN mkdir /buildResult
 WORKDIR /mcbuild
 
-RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-RUN java -jar BuildTools.jar
-
-RUN rm Spigot/Spigot-API/target/spigot-api* && \
-    rm spigot-*.jar
-
 # This version specify Spigot server version
 ARG version
 # This argument is a dummy argument which break cache if its value is changed.
 ARG revision
-RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-RUN java -jar BuildTools.jar --rev ${version}
+# Load build tool, run it, copy the result to a specific folder, and delete all build files
+RUN curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar && \
+    java -jar BuildTools.jar --rev ${version} && \
+    cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
+    cp spigot-*.jar /buildResult/spigot.jar && \
+    rm -rf /mcbuild
 
-# Copy the result to a specific folder
-RUN cp Spigot/Spigot-API/target/spigot-api* /buildResult/ && \
-    cp spigot-*.jar /buildResult/spigot.jar
-
-# Delete all building files.
-RUN rm -rf /mcbuild
 # Set current login user
 USER minecraft
 WORKDIR /data
