@@ -1,0 +1,27 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${ROOT_PASSWORD}
+    volumes:
+      - mongodata:/data/db
+      - mongoconfig:/data/configdb
+    ports:
+      - ${PORT}:27017
+    networks:
+      spigot-network:
+        aliases:
+          - mongo
+
+volumes:
+  mongodata:
+  mongoconfig:
+
+networks:
+  spigot-network:
+    external: true
+    name: ${NETWORK_NAME}
